@@ -6,13 +6,17 @@ import (
 	"net/url"
 	"os"
 	"path"
+	"time"
 
 	"github.com/steinfletcher/apitest"
 )
 
 const (
+	requestTimeout   = 15 * time.Second
 	defaultUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
 )
+
+var networkClient = &http.Client{Timeout: requestTimeout}
 
 type ApiTest struct {
 	token     string
@@ -38,7 +42,7 @@ func (at *ApiTest) Auth(token string) *ApiTest {
 }
 
 func (at *ApiTest) Create() *apitest.APITest {
-	apitestNew := apitest.New().EnableNetworking()
+	apitestNew := apitest.New().EnableNetworking(networkClient)
 	if os.Getenv("DEBUG") == "true" {
 		apitestNew = apitestNew.Debug()
 	}

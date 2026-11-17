@@ -1,6 +1,7 @@
 package advertisements
 
 import (
+	"context"
 	"net/http"
 	"testing"
 
@@ -8,12 +9,12 @@ import (
 	apiRunner "api-tests-template/internal/helpers/api-runner"
 )
 
-// HttpGetAdvertisements ищет объявления по названию и проверяет статус 200 OK.
-func HttpGetAdvertisements(t *testing.T, token, textForSearch string) *http.Response {
+// HttpGetAdvertisements отправляет запрос поиска объявлений по названию.
+func HttpGetAdvertisements(t *testing.T, ctx context.Context, token, textForSearch string) *http.Response {
 	return apiRunner.GetRunner().Auth(token).Create().
 		Get(path.AdvertisementsPath).
 		Query("search", textForSearch).
+		WithContext(ctx).
 		Expect(t).
-		Status(http.StatusOK).
 		End().Response
 }

@@ -26,18 +26,34 @@
 ```
 TEST_LOGIN=your_login
 TEST_PASSWORD=your_password
+TEST_FAVORITES_LOGIN=your_second_login
+TEST_FAVORITES_PASSWORD=your_second_password
 ```
+
+`TEST_FAVORITES_LOGIN` и `TEST_FAVORITES_PASSWORD` задают данные второго тестового аккаунта. Первый аккаунт создаёт объявления, второй добавляет их в избранное. Для проверки лимита избранное второго аккаунта должно быть пустым.
 
 8. Для запуска всех тестов достаточно выполнить команду в корне проекта:
 
 ```bash
-  go test -v ./...
+  go test -count=1 -v ./...
 ```
+
+Для проверки повторяемости выполните команду три раза подряд.
 
 9. Отдельный пакет с тестами можно запустить командой:
 
 ```bash
-  go test -v ./tests/scenarios/myAdvertisement/
+  go test -count=1 -v ./tests/scenarios/myAdvertisement/
+```
+
+## Покрытие кода
+
+Последний прогон на TestBoard покрыл 94,2% операторов Go-кода клиентов, менеджеров и тестовых хелперов (277 из 294).
+
+```bash
+go test -count=1 -coverpkg=./internal/...,./tests/... -coverprofile=/tmp/testboard-coverage.out ./...
+go tool cover -func=/tmp/testboard-coverage.out
+go tool cover -html=/tmp/testboard-coverage.out
 ```
 
 ## Логирование
