@@ -25,16 +25,20 @@ func HttpPostAdvertisement(t *testing.T, token string, request models.CreateAdve
 	var body bytes.Buffer
 	form := multipart.NewWriter(&body)
 	if request.Title != nil {
-		require.NoError(t, form.WriteField("title", *request.Title))
+		require.NoError(t, form.WriteField("title", *request.Title),
+			"Не удалось записать поле title в форму создания объявления")
 	}
 	if request.Description != nil {
-		require.NoError(t, form.WriteField("description", *request.Description))
+		require.NoError(t, form.WriteField("description", *request.Description),
+			"Не удалось записать поле description в форму создания объявления")
 	}
 	if request.Price != nil {
-		require.NoError(t, form.WriteField("price", strconv.FormatFloat(*request.Price, 'f', -1, 64)))
+		require.NoError(t, form.WriteField("price", strconv.FormatFloat(*request.Price, 'f', -1, 64)),
+			"Не удалось записать поле price в форму создания объявления")
 	}
 	if request.Quantity != nil {
-		require.NoError(t, form.WriteField("quantity", strconv.Itoa(*request.Quantity)))
+		require.NoError(t, form.WriteField("quantity", strconv.Itoa(*request.Quantity)),
+			"Не удалось записать поле quantity в форму создания объявления")
 	}
 	for _, photo := range request.Photos {
 		headers := make(textproto.MIMEHeader)

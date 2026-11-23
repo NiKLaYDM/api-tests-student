@@ -47,12 +47,18 @@ func AdvertisementCleanup(t *testing.T, token string) func(string) {
 	t.Helper()
 	return func(id string) {
 		t.Cleanup(func() {
-			t.Logf("Очистка: удаляем объявление %s", id)
-			status := advertisements.DeleteAdvertisement(t, token, id, http.StatusNoContent, http.StatusNotFound, http.StatusForbidden)
-			if status == http.StatusForbidden {
-				// TestBoard может вернуть 403 при повторном удалении отсутствующего объявления.
-				advertisements.GetAdvertisement(t, id, http.StatusNotFound)
-			}
+			cleanupAdvertisement(t, token, id)
 		})
+	}
+}
+
+// cleanupAdvertisement удаляет тестовое объявление и подтверждает отсутствие после повторного удаления.
+func cleanupAdvertisement(t *testing.T, token, id string) {
+	t.Helper()
+	t.Logf("Очистка: удаляем объявление %s", id)
+	status := advertisements.DeleteAdvertisement(t, token, id, http.StatusNoContent, http.StatusNotFound, http.StatusForbidden)
+	if status == http.StatusForbidden {
+		// TestBoard может вернуть 403 при повторном удалении отсутствующего объявления.
+		advertisements.GetAdvertisement(t, id, http.StatusNotFound)
 	}
 }

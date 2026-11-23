@@ -30,12 +30,12 @@ TEST_FAVORITES_LOGIN=your_second_login
 TEST_FAVORITES_PASSWORD=your_second_password
 ```
 
-`TEST_FAVORITES_LOGIN` и `TEST_FAVORITES_PASSWORD` задают данные второго тестового аккаунта. Первый аккаунт создаёт объявления, второй добавляет их в избранное. Для проверки лимита избранное второго аккаунта должно быть пустым.
+`TEST_FAVORITES_LOGIN` и `TEST_FAVORITES_PASSWORD` задают данные второго тестового аккаунта. Первый аккаунт создаёт объявления, второй добавляет их в избранное. Для проверки лимита тест сам регистрирует отдельного пользователя с пустым избранным. Временные объявления и записи избранного очищаются после теста. Созданный аккаунт остаётся на учебном стенде, поскольку удаление пользователей доступно только администратору.
 
 8. Для запуска всех тестов достаточно выполнить команду в корне проекта:
 
 ```bash
-  go test -count=1 -v ./...
+  go test -count=1 -timeout=20m -v ./...
 ```
 
 Для проверки повторяемости выполните команду три раза подряд.
@@ -43,15 +43,15 @@ TEST_FAVORITES_PASSWORD=your_second_password
 9. Отдельный пакет с тестами можно запустить командой:
 
 ```bash
-  go test -count=1 -v ./tests/scenarios/myAdvertisement/
+  go test -count=1 -timeout=20m -v ./tests/scenarios/myAdvertisement/
 ```
 
 ## Покрытие кода
 
-Последний прогон на TestBoard покрыл 94,2% операторов Go-кода клиентов, менеджеров и тестовых хелперов (277 из 294).
+Последний прогон на TestBoard покрыл 94,4% операторов Go-кода клиентов, менеджеров и тестовых хелперов (323 из 342).
 
 ```bash
-go test -count=1 -coverpkg=./internal/...,./tests/... -coverprofile=/tmp/testboard-coverage.out ./...
+go test -count=1 -timeout=20m -coverpkg=./internal/...,./tests/... -coverprofile=/tmp/testboard-coverage.out ./...
 go tool cover -func=/tmp/testboard-coverage.out
 go tool cover -html=/tmp/testboard-coverage.out
 ```
